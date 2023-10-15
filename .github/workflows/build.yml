@@ -1,0 +1,42 @@
+on: push
+jobs:
+    build-category-theory-for-programmers:
+        runs-on: ubuntu-latest
+        steps:
+          - uses: actions/checkout@v4
+          - run: git submodule update --init packages/category-theory-for-programmers/source
+          - run: packages/category-theory-for-programmers/install-dependencies.sh
+          - run: packages/category-theory-for-programmers/build.sh target
+          - uses: actions/upload-artifact@v3
+            with:
+                name: category-theory-for-programmers
+                path: target
+    build-essentials-of-compilation:
+        runs-on: ubuntu-latest
+        steps:
+          - uses: actions/checkout@v4
+          - run: git submodule update --init packages/essentials-of-compilation/source
+          - run: packages/essentials-of-compilation/install-dependencies.sh
+          - run: packages/essentials-of-compilation/build.sh target
+          - uses: actions/upload-artifact@v3
+            with:
+                name: essentials-of-compilation
+                path: target
+    publish:
+        runs-on: ubuntu-latest
+        needs:
+          - build-category-theory-for-programmers
+          - build-essentials-of-compilation
+        permissions:
+            contents: write
+        steps:
+          - uses: actions/download-artifact@v3
+            with:
+                path: download
+          - run: mkdir target && mv -t target download/*/*
+          - uses: peaceiris/actions-gh-pages@v3
+            with:
+                github_token: ${{ secrets.GITHUB_TOKEN }}
+                publish_branch: target
+                publish_dir: target
+                enable_jekyll: true

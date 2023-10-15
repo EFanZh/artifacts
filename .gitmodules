@@ -1,0 +1,6 @@
+[submodule "artifacts/category-theory-for-programmers"]
+	path = packages/category-theory-for-programmers/source
+	url = ../../hmemcpy/milewski-ctfp-pdf.git
+[submodule "artifacts/essentials-of-compilation"]
+	path = packages/essentials-of-compilation/source
+	url = ../../IUCompilerCourse/Essentials-of-Compilation.git
